@@ -1,13 +1,19 @@
 import numpy as np
+import pandas as pd
 import logging
-from exploration.importer import ImporterFolder
-from exploration.constants import DIR_NAME, N_CLUSTERS
+import os
 
 logger = logging.getLogger(__name__)
 
+def load_data(dir_name, filename):
+    with open(os.path.join(os.getcwd(), dir_name, filename)) as f:
 
-def data_preprocessor(filename):
-    df = ImporterFolder(DIR_NAME).load_data(filename)
+        data = pd.read_csv(f)
+    
+    return data
+
+def data_preprocessor(dir_name, filename):
+    df = load_data(dir_name, filename)
 
     # Find duplicate rows if any and drop them
     duplicate = df[df.duplicated('order_id')]

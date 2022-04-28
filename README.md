@@ -17,10 +17,3 @@ The following command applies the migrations by default to sqlite3 (usually sqli
 Start the application (development mode):
 `python3 manage.py runserver` # default port 8000
 
-## How to run the application using Docker
-
-To build the django backend use:
-`docker build -t backend-app-image .`
-
-To start all the services (backend+database) use:
-`docker compose up` 

@@ -1,11 +1,12 @@
 import matplotlib.pyplot as plt
+import pandas as pd
 import io
 
 from django.http import  HttpResponse
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from exploration.constants import FILENAME, DIR_NAME, COL_ORDERS, COL_EARNINGS, LOOKBACK, PREDICTION_HORIZON
-from exploration.utils import preprocess_data, prepare_model
+from exploration.utils import preprocess_data, prepare_model, predict_new_values
 from core.utils import get_config
 
 
@@ -83,3 +84,50 @@ def data_trainer_earnings(request):
 
     response = HttpResponse(buf.getvalue(), content_type='image/png')
     return response 
+
+@api_view(['GET'])
+def data_predict_orders(request):
+
+    df_lstm = preprocess_data(DIR_NAME, FILENAME)
+
+    prediction_dates, prediction_list = predict_new_values(COL_ORDERS, df_lstm)
+
+    df_pred = pd.DataFrame([prediction_dates,prediction_list]) #Each list would be added as a row
+    df_pred = df_pred.transpose() #To Transpose and make each rows as columns
+    df_pred.columns=['created_at', COL_ORDERS] #Rename the columns
+    df_total = pd.concat([df_lstm, df_pred], axis=0)
+
+    fig = plt.figure(figsize=(16,6))
+    df_total.plot(x="created_at", y=COL_ORDERS)
+    buf = io.BytesIO()
+    plt.xticks(rotation=30)
+    plt.title('Predicted orders untill the end of March 2022')
+    plt.savefig(buf, format='png', dpi=100)
+    plt.close(fig)
+
+    response = HttpResponse(buf.getvalue(), content_type='image/png')
+    return response
+
+@api_view(['GET'])
+def data_predict_earnings(request):
+
+    df_lstm = preprocess_data(DIR_NAME, FILENAME)
+
+    prediction_dates, prediction_list = predict_new_values(COL_EARNINGS, df_lstm)
+
+    df_pred = pd.DataFrame([prediction_dates,prediction_list]) #Each list would be added as a row
+    df_pred = df_pred.transpose() #To Transpose and make each rows as columns
+    df_pred.columns=['created_at', COL_EARNINGS] #Rename the columns
+    df_total = pd.concat([df_lstm, df_pred], axis=0)
+
+    fig = plt.figure(figsize=(16,6))
+    df_total.plot(x="created_at", y=COL_EARNINGS)
+    buf = io.BytesIO()
+    plt.xticks(rotation=30)
+    plt.title('Predicted orders untill the end of March 2022')
+    plt.savefig(buf, format='png', dpi=100)
+    plt.close(fig)
+
+    response = HttpResponse(buf.getvalue(), content_type='image/png')
+    return response    
+

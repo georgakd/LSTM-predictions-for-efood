@@ -8,6 +8,8 @@ from tensorflow.keras.models import Sequential, load_model
 from tensorflow.keras.layers import Dense, LSTM
 from sklearn.metrics import mean_absolute_percentage_error
 import h5py
+from core.utils import get_config
+from exploration.constants import LOOKBACK, PREDICTION_HORIZON
 
 
 logger = logging.getLogger(__name__)
@@ -105,9 +107,36 @@ def prepare_model(df, col, neurons, epochs, batch_size, lookback=1, prediction_h
     return Y_test, test_predict
 
 
-def predict_new_values(col, model):
-
+def predict_new_values(col, df):
+    
+    # Load LSTM model
     model = load_model('model_' + col +'.h5')
 
-     
+    # Prepare the N-points future dataset
+    data = df[col].values
+    data = data.reshape((-1,1))
+    data.shape
+    scaler = MinMaxScaler(feature_range=(0,1))
+    data = scaler.fit_transform(data)
+
+    prediction_list = data[-LOOKBACK:]
+    num_prediction = get_config('NUM_PREDICTION', cast=int) 
+
+
+    for _ in range(num_prediction):
+        x = prediction_list[-LOOKBACK:]
+        x = x.reshape((1, LOOKBACK, 1))
+        out = model.predict(x)[0][0]
+        prediction_list = np.append(prediction_list, out)
+    prediction_list = prediction_list[LOOKBACK-1:]
+
+    prediction_list = prediction_list.reshape((-1,1))
+    prediction_list  = scaler.inverse_transform(prediction_list)
+    prediction_list = [i[0] for i in prediction_list]
+
+    last_date = df['created_at'].values[-1]
+    prediction_dates = pd.date_range(last_date, periods=num_prediction+1).tolist()
+
+
+    return prediction_dates, prediction_list 
 

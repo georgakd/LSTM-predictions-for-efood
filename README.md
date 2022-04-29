@@ -21,9 +21,11 @@ The following command applies the migrations by default to sqlite3 (usually sqli
 
 - To view a plot of the count(orders), sum(earnings) per day click:  http://localhost:8000/api/exploration/data_viewer/
 
-- To view a plot of the results of the LSTM testing phase for orders click: http://localhost:8000/api/exploration/data_trainer_orders/
+- To view a plot of the LSTM training/testing phase for orders click: http://localhost:8000/api/exploration/data_trainer_orders/
+- To view a plot of the LSTM future prediction phase for orders click: http://localhost:8000/api/exploration/data_predict_orders/
 
-- To view a plot of the results of the LSTM testing phase for earnings click: http://localhost:8000/api/exploration/data_trainer_earnings/
+- To view a plot of the LSTM training/testing phase for earnings click: http://localhost:8000/api/exploration/data_trainer_earnings/
+- To view a plot of the LSTM future prediction phase for earnings click: http://localhost:8000/api/exploration/data_predict_earnings/
 
 5) To view the results of the MAPE scores go to logs folder
 

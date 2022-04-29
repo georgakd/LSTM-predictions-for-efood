@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt.token_blacklist',
     'corsheaders',
     'django_crontab',
+    'exploration'
 ]
 
 MIDDLEWARE = [
@@ -125,7 +126,7 @@ LOGGING = {
             'maxBytes': 1024 * 1024 * 25,  # 25MB
             'backupCount': 10,
             'formatter': 'simple',
-            'filename': BASE_DIR.child('logs').child('fresco_dashboard.log'),
+            'filename': BASE_DIR.child('logs').child('dashboard.log'),
         },
     },
     'loggers': LOGGERS

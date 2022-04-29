@@ -3,16 +3,17 @@ import pandas as pd
 import logging
 import os
 
-from sklearn.preprocessing import MinMaxScaler
 from tensorflow.keras.models import Sequential, load_model
 from tensorflow.keras.layers import Dense, LSTM
+
 from sklearn.metrics import mean_absolute_percentage_error
 import h5py
 from core.utils import get_config
-from exploration.constants import LOOKBACK, PREDICTION_HORIZON
+from exploration.constants import LOOKBACK
 
 
 logger = logging.getLogger(__name__)
+
 
 def load_data(dir_name, filename):
     with open(os.path.join(os.getcwd(), dir_name, filename)) as f:

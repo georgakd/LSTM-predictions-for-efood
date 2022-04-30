@@ -4,7 +4,7 @@ COPY manage.py gunicorn-cfg.py requirements.txt ./
 COPY core core
 COPY exploration exploration
 COPY datasets datasets
-COPY .env ./
+
 COPY model_order_id.h5 ./
 COPY model_total_order_value.h5 ./
 

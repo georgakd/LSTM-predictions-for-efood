@@ -22,9 +22,10 @@ def load_data(dir_name, filename):
 
 def preprocess_data(dir_name, filename):
     df = load_data(dir_name, filename)
+    
 
     # Find duplicate rows if any and drop them
-    duplicate = df[df.duplicated('order_id')]
+    duplicate = df[df.duplicated()]
     number_of_dups = len(duplicate)
     if number_of_dups:
         df = df.drop_duplicates()

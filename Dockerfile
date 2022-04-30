@@ -1,7 +1,5 @@
 FROM python:3.8
 
-ARG 
-
 COPY manage.py gunicorn-cfg.py requirements.txt ./
 COPY core core
 COPY exploration exploration

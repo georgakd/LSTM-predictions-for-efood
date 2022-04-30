@@ -1,5 +1,7 @@
 # efood_test
 
+There are 2 different ways to run the solution as described below: 
+
 ## How to run the application using django local server
 
 Create a virtual environment for the project
@@ -39,7 +41,7 @@ migrate is responsible for applying those to your database.
 - To view a plot of the LSTM training/testing phase for earnings click: http://localhost:8000/api/exploration/data_trainer_earnings/
 - To view a plot of the LSTM future prediction phase for earnings click: http://localhost:8000/api/exploration/data_predict_earnings/
 
-**Note: You can skip running the training endpoints, because the models have been stored also in .h5 format. 
+**Note: You can skip running the training endpoints, as it takes some time. The models have been stored also in .h5 format. 
 You can call directly the prediction endpoints that load the models and run.**  
 
 2) To view the results of the MAPE scores for each model, go to logs folder and check dashboard.log.

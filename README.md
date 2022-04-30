@@ -1,7 +1,7 @@
 # efood_test
 
 There are 2 different ways to run the solution as described below, you can try them both.
-The input files are large files so in order to pull them, please install the Git LFS to your system and then perform:
+**SOS: The input files are large files so in order to pull them, please install the Git LFS to your system and then perform:**
 
 `git lfs install`
 `git lfs pull`

@@ -20,7 +20,7 @@ migrate is responsible for applying those to your database.
 ## How to run the application using docker
 
 **HINT: To avoid dependency problems if you have other python versions, run the solution dockerized**
-1) docker build -t backend
+1) docker build -t backend .
 2) docker run -p 8000:8000 backend
 
 ## How to view the results

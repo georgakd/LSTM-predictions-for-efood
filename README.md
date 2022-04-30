@@ -24,6 +24,26 @@ The following command applies the migrations by default to sqlite3 (usually sqli
 ```
 Identify the top 10 customer ids:
 
+SELECT customer_id, count(order_id)
+FROM product-analytics-test.ds.orders
+where visitor_type = 'Returning Visitor' 
+group by customer_id
+order by count(order_id) desc
+limit 10
+```
+
+```
+Export the selected customers:
+
+SELECT created_at, customer_id, order_id, total_order_value 
+FROM `product-analytics-test.ds.orders`
+where customer_id in (149375881,388664027,422378875,527242121,551715615,644315164,662229028,706537722,839511663,891671091)
+```
+- datasets.csv/top_10_customers_earnings.csv: A small list of customers that have performed the most values in orders from January-March 2022. Exported from BiqQuery using:
+
+```
+Identify the top 10 customer ids:
+
 SELECT customer_id, sum(total_order_value)
 FROM product-analytics-test.ds.orders
 where visitor_type = 'Returning Visitor' 
@@ -33,16 +53,16 @@ limit 10
 ```
 
 ```
-Export the selected customer:
+Export the selected customers:
 
 SELECT created_at, customer_id, order_id, total_order_value 
 FROM `product-analytics-test.ds.orders`
-where customer_id in (149375881,388664027,422378875,527242121,551715615,644315164,662229028,706537722,839511663,891671091)
+where customer_id in (251163933,274131121,422378875,605126970,642748121,729052150,771669831,813139442,855149500,993537497)
 ```
 
+The full dataset hase been used to train the LSTM models. The two small datasets are used for model validation purposes.
 
-
-4) Basic API calls supported via your browser
+4) You can view the results with performing basic API calls at your browser:
 
 - To view a plot of the count(orders), sum(earnings) per day click:  http://localhost:8000/api/exploration/data_viewer/
 
@@ -52,5 +72,8 @@ where customer_id in (149375881,388664027,422378875,527242121,551715615,64431516
 - To view a plot of the LSTM training/testing phase for earnings click: http://localhost:8000/api/exploration/data_trainer_earnings/
 - To view a plot of the LSTM future prediction phase for earnings click: http://localhost:8000/api/exploration/data_predict_earnings/
 
-5) To view the results of the MAPE scores go to logs folder
+**Note: You can skip running the training endpoints, because the models have been stored also in .h5 format. 
+You can call directly the prediction endpoints that load the models and run.**  
+
+5) To view the results of the MAPE scores for each model, go to logs folder
 

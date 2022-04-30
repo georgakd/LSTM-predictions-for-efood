@@ -45,18 +45,22 @@ migrate is responsible for applying those to your database.
 - To view a plot of the LSTM training/testing phase for earnings click: http://localhost:8000/api/exploration/data_trainer_earnings/
 - To view a plot of the LSTM future prediction phase for earnings click: http://localhost:8000/api/exploration/data_predict_earnings/
 
+- To predict orders/values for a given customer click: http://localhost:8000/api/exploration/data_predict_per_customer/
+In order to give other customer_id than the predefined ones, go to .env and change the respective config variable.
+The list of ids that you can use is provided in the datasets/top_10_customers_orders.csv file and datasets/top_10_customers_earnings.csv respectively. 
+
 **Note: You can skip running the training endpoints, as it takes some time. The models have been stored also in .h5 format. 
 You can call directly the prediction endpoints that load the models and run.**  
 
-2) To view the results of the MAPE scores for each model, go to logs folder and check dashboard.log.
+2) To view the results of the MAPE scores for each model, as well as the predicted number of orders/values for specific customers go to logs folder and check dashboard.log.
 
 
 ## Additional information
 1) Configuration parameters are read from .env file and they can be changed manually from the user before running the web application.
 
 2) Input files:
-- datasets.csv/bq-results.csv: The full exported dataset directly from the orders table in BigQuery.
-- datasets.csv/top_10_customers_orders.csv: A small list of customers that have performed the most orders from January-March 2022. Exported from BiqQuery using:
+- datasets/bq-results.csv: The full exported dataset directly from the orders table in BigQuery.
+- datasets/top_10_customers_orders.csv: A small list of customers that have performed the most orders from January-March 2019. Exported from BiqQuery using:
 
 ```
 Identify the top 10 customer ids:
@@ -76,7 +80,7 @@ SELECT created_at, customer_id, order_id, total_order_value
 FROM `product-analytics-test.ds.orders`
 where customer_id in (149375881,388664027,422378875,527242121,551715615,644315164,662229028,706537722,839511663,891671091)
 ```
-- datasets.csv/top_10_customers_earnings.csv: A small list of customers that have performed the most values in orders from January-March 2022. Exported from BiqQuery using:
+- datasets/top_10_customers_earnings.csv: A small list of customers that have performed the most values in orders from January-March 2019. Exported from BiqQuery using:
 
 ```
 Identify the top 10 customer ids:

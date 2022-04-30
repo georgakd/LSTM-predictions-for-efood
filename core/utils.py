@@ -2,7 +2,7 @@
 from django.core.exceptions import ImproperlyConfigured
 from decouple import config, Csv
 
-# Functions
+# General config functions
 def get_config(env_var: str, default=None, **kwargs):
     """
     Checks for type validity of cast function in the main config function.

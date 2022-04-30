@@ -1,5 +1,7 @@
 DIR_NAME = 'datasets'
 FILENAME = 'bq-results.csv'
+FILENAME_ORDERS = 'top_10_customers_orders.csv'
+FILENAME_ORDER_VALUES = 'top_10_customers_earnings.csv'
 LOOKBACK = 7
 PREDICTION_HORIZON = 7
 COL_ORDERS = 'order_id'

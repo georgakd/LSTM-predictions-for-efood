@@ -1,5 +1,7 @@
 FROM python:3.8
 
+ARG 
+
 COPY manage.py gunicorn-cfg.py requirements.txt ./
 COPY core core
 COPY exploration exploration
@@ -16,4 +18,7 @@ RUN python manage.py makemigrations
 RUN python manage.py migrate
 
 EXPOSE 8000
-CMD ["gunicorn", "--config", "gunicorn-cfg.py", "core.wsgi"]
+
+# runs the production server
+ENTRYPOINT ["python", "manage.py"]
+CMD ["runserver", "0.0.0.0:8000"]

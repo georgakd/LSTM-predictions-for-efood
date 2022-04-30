@@ -2,6 +2,11 @@
 
 ## How to run the application using django local server
 
+Create a virtual environment for the project
+`virtualenv env`
+`source env/bin/activate`
+
+
 1) Install basic modules for the project to run.
 `pip3 install -r requirements.txt`
 
@@ -21,7 +26,7 @@ migrate is responsible for applying those to your database.
 
 **HINT: To avoid dependency problems if you have other python versions, run the solution dockerized**
 1) docker build -t backend .
-2) docker run -p 8000:8000 backend
+2) docker run -p 8000:8000 --env-file .env backend
 
 ## How to view the results
 1) You can view the results with performing basic API calls at your browser:

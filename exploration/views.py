@@ -124,7 +124,7 @@ def data_predict_earnings(request):
     df_total.plot(x="created_at", y=COL_EARNINGS)
     buf = io.BytesIO()
     plt.xticks(rotation=30)
-    plt.title('Predicted orders untill the end of March 2022')
+    plt.title('Predicted earnings untill the end of March 2022')
     plt.savefig(buf, format='png', dpi=100)
     plt.close(fig)
 

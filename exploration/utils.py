@@ -5,7 +5,7 @@ import os
 
 from tensorflow.keras.models import Sequential, load_model
 from tensorflow.keras.layers import Dense, LSTM
-
+from sklearn.preprocessing import MinMaxScaler
 from sklearn.metrics import mean_absolute_percentage_error
 import h5py
 from core.utils import get_config
@@ -35,7 +35,7 @@ def preprocess_data(dir_name, filename):
     df1 = df.dropna(subset=['visitor_type'])
     df_ret = df1.loc[df1["visitor_type"].str.contains('returning', case=False)]
 
-    # We will remove thesse columns as they do not contribute in the features of the prediction problem
+    # We will remove these columns as they do not contribute in the features of the prediction problem
     df_minimal = df_ret.drop(columns=['platform', 'vendor_id', 'business_type', 'zipcode', 'cash', 'has_coupon', 'channel'])
     
     # Convert the x column to date

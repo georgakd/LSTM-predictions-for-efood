@@ -17,7 +17,14 @@ migrate is responsible for applying those to your database.
 4) Start the web application (development mode):
 `python3 manage.py runserver` # default port 8000
 
-5) You can view the results with performing basic API calls at your browser:
+## How to run the application using docker
+
+**HINT: To avoid dependency problems if you have other python versions, run the solution dockerized**
+1) docker build -t backend
+2) docker run -p 8000:8000 backend
+
+## How to view the results
+1) You can view the results with performing basic API calls at your browser:
 
 - To view a plot of the count(orders), sum(earnings) per day click:  http://localhost:8000/api/exploration/data_viewer/
 
@@ -30,7 +37,7 @@ migrate is responsible for applying those to your database.
 **Note: You can skip running the training endpoints, because the models have been stored also in .h5 format. 
 You can call directly the prediction endpoints that load the models and run.**  
 
-6) To view the results of the MAPE scores for each model, go to logs folder
+2) To view the results of the MAPE scores for each model, go to logs folder and check dashboard.log.
 
 
 ## Additional information

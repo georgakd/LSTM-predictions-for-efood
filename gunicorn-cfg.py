@@ -3,7 +3,7 @@
 
 bind = '0.0.0.0:8000'
 timeout = 600
-workers = 3
+workers = 1
 threads = 3
 accesslog = '-'
 loglevel = 'debug'

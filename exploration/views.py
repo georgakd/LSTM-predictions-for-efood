@@ -173,8 +173,8 @@ def data_predict_per_customer(request):
 
     prediction_list_orders=[int(i) for i in prediction_list_orders]
 
-    logger.info(f"The total number of predicted orders for customer_id {get_config('CUSTOMER_order_id')} is {sum(prediction_list_orders)}")
-    logger.info(f"The total number of predicted values for customer_id {get_config('CUSTOMER_total_order_value')} is {sum(prediction_list_values)}")
+    logger.info(f"The total number of predicted orders for customer_id {get_config('CUSTOMER_order_id',cast=str)} is {sum(prediction_list_orders)}")
+    logger.info(f"The total number of predicted values for customer_id {get_config('CUSTOMER_total_order_value',cast=str)} is {sum(prediction_list_values)}")
     
     response_data = {
             'customer_id_orders': get_config('CUSTOMER_order_id'),

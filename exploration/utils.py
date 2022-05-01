@@ -187,6 +187,7 @@ def predict_new_values(col, df):
 
     if ':' in col:
         col = col.split(':')[0]
+    col = col.replace("'","")
 
     # Prepare the N-points future dataset
     data = df[col].values

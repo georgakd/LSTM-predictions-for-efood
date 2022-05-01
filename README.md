@@ -3,14 +3,14 @@
 There are 2 different ways to run the solution as described below, you can try them both.
 **SOS: The input files are large files so in order to pull them, please install the Git LFS to your system and then perform:**
 
-`git lfs install`
-`git lfs pull`
+- `git lfs install`
+- `git lfs pull`
 
 ## How to run the application using django local server
 
 Create a virtual environment for the project
-`virtualenv env`
-`source env/bin/activate`
+- `virtualenv env`
+- `source env/bin/activate`
 
 
 1) Install basic modules for the project to run.

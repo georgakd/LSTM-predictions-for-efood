@@ -47,7 +47,10 @@ migrate is responsible for applying those to your database.
 
 - To predict orders/values for a given customer click: http://localhost:8000/api/exploration/data_predict_per_customer/
 In order to give other customer_id than the predefined ones, go to .env and change the respective config variable.
-The list of ids that you can use is provided in the datasets/top_10_customers_orders.csv file and datasets/top_10_customers_earnings.csv respectively. 
+The list of ids that you can use is provided in the datasets/top_10_customers_orders.csv file and datasets/top_10_customers_earnings.csv respectively.
+
+- To export to csv all predictions for all customers (currently scales only to a small list of customers) click: http://localhost:8000/api/exploration/data_predict_per_customer_all_returning_customers 
+**Note: Do not forget to stop the terminal with contol-c in order for the file to be created and saved.**
 
 **Note: You can skip running the training endpoints, as it takes some time. The models have been stored also in .h5 format. 
 You can call directly the prediction endpoints that load the models and run.**  

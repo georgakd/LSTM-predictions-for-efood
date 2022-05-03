@@ -1,13 +1,14 @@
 import matplotlib.pyplot as plt
 import pandas as pd
 import io
+import csv
 
 from django.http import  HttpResponse
 from rest_framework.response import Response
 from django.http import JsonResponse
 from rest_framework.decorators import api_view
-from exploration.constants import FILENAME, DIR_NAME, COL_ORDERS, COL_EARNINGS, LOOKBACK, PREDICTION_HORIZON, FILENAME_ORDER_VALUES, FILENAME_ORDERS
-from exploration.utils import preprocess_all_data, prepare_model, predict_new_values, preprocess_top_ten_data
+from exploration.constants import FILENAME, FILENAME_TOTAL_PER_CUSTOMER, DIR_NAME, COL_ORDERS, COL_EARNINGS, LOOKBACK, PREDICTION_HORIZON, FILENAME_ORDER_VALUES, FILENAME_ORDERS
+from exploration.utils import preprocess_all_data, prepare_model, predict_new_values, preprocess_per_customer_data
 from core.utils import get_config
 
 import logging
@@ -165,9 +166,10 @@ def data_predict_per_customer(request):
     N is configurable in .env through the parameter NUM_PREDICTION. 
     """
 
-    df_orders = preprocess_top_ten_data(DIR_NAME, FILENAME_ORDERS, COL_ORDERS, 'count')
-    df_values = preprocess_top_ten_data(DIR_NAME, FILENAME_ORDER_VALUES, COL_EARNINGS, 'sum')
+    df_orders = preprocess_per_customer_data(DIR_NAME, FILENAME_ORDERS, COL_ORDERS, 'count')
+    df_values = preprocess_per_customer_data(DIR_NAME, FILENAME_ORDER_VALUES, COL_EARNINGS, 'sum')
 
+    
     prediction_dates, prediction_list_orders = predict_new_values(get_config('CUSTOMER_order_id'), df_orders)
     prediction_dates, prediction_list_values = predict_new_values(get_config('CUSTOMER_total_order_value'), df_values)
 
@@ -176,6 +178,7 @@ def data_predict_per_customer(request):
     logger.info(f"The total number of predicted orders for customer_id {get_config('CUSTOMER_order_id',cast=str)} is {sum(prediction_list_orders)}")
     logger.info(f"The total number of predicted values for customer_id {get_config('CUSTOMER_total_order_value',cast=str)} is {sum(prediction_list_values)}")
     
+    # Response data in json
     response_data = {
             'customer_id_orders': get_config('CUSTOMER_order_id'),
             'total_predicted_orders': sum(prediction_list_orders),
@@ -183,4 +186,56 @@ def data_predict_per_customer(request):
             'total_predicted_values': sum(prediction_list_values),
         }
     
+    #Export to file
+    customer_list = [get_config('CUSTOMER_order_id',cast=str), get_config('CUSTOMER_total_order_value',cast=str)]    
+    order_results_list = [sum(prediction_list_orders), sum(prediction_list_orders)]
+    values_results_list =[sum(prediction_list_values), sum(prediction_list_values)] 
+    pd.DataFrame({'customer_id':customer_list,'orders_predictions':order_results_list,'values_predictions':values_results_list}).to_csv('results.csv')
+    
+    return JsonResponse(response_data)
+
+@api_view(['GET'])
+def data_predict_per_customer_all_returning_customers(request):
+    """
+    API request to predict the sum of orders and values per given customer, for all returning customers, at N points ahead in time, 
+    N is configurable in .env through the parameter NUM_PREDICTION.
+    This view supports for now a minimal list of customers and it needs to be improved using spark compute power in order to 
+    deliver results for all the customer portfolio. 
+    """
+
+    df_orders = preprocess_per_customer_data(DIR_NAME, FILENAME_ORDERS, COL_ORDERS, 'count')
+    df_values = preprocess_per_customer_data(DIR_NAME, FILENAME_ORDERS, COL_EARNINGS, 'sum')
+
+    # Create a list with all returning customers from the labels of the dataframe and drop the first column which is the date
+
+    columnsNamesArr = list(df_orders.columns.values)
+    columnsNamesArr = columnsNamesArr[1:]
+
+    order_results_list = []
+    values_results_list = []
+
+    for customer in columnsNamesArr:
+        prediction_dates, prediction_list_orders = predict_new_values(customer+':order_id', df_orders)
+        prediction_list_orders=[int(i) for i in prediction_list_orders]
+        logger.info(f"Predictions done for N customers {customer}")                    
+
+        count_orders = sum(prediction_list_orders)
+        order_results_list.append(count_orders) 
+
+        prediction_dates, prediction_list_values = predict_new_values(customer+':total_order_value', df_values)
+        logger.info(f"Predictions done for customer {customer}")                    
+
+        sum_values = sum(prediction_list_values)
+        values_results_list.append(sum_values)
+
+    logger.info(f"Predictions for all customers have finished")
+
+    #Export to file
+    pd.DataFrame({'customer_id':columnsNamesArr,'orders_predictions':order_results_list,'values_predictions':values_results_list}).to_csv('results.csv')
+    
+    # Response data in json
+    response_data = {
+            'predictions': 'successfully done'
+    }
+
     return JsonResponse(response_data) 

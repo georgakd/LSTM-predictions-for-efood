@@ -30,8 +30,7 @@ def find_missing_dates(df):
     If there are missing dates in the dataset, the missing values are imputed.
     """
 
-    # drop time
-    df['created_at']=[i.split('T')[0] for i in df['created_at']]
+    df['created_at']=[re.split(' |T',i)[0] for i in df['created_at']]
     # get all days from min to max; just in case a day is missing...
     days = [datetime.datetime.strptime(i, '%Y-%m-%d') for i in set(df['created_at'])]
     all_days = []
@@ -39,7 +38,7 @@ def find_missing_dates(df):
         all_days.append(str(min(days) + datetime.timedelta(days=i)).split()[0])
     return all_days        
 
-def preprocess_top_ten_data(dir_name, filename, col, operation_type):
+def preprocess_per_customer_data(dir_name, filename, col, operation_type):
     """
     Preprocess data regarding the per customer predictions.
     """
@@ -213,7 +212,6 @@ def predict_new_values(col, df):
 
     last_date = df['created_at'].values[-1]
     prediction_dates = pd.date_range(last_date, periods=num_prediction+1).tolist()
-
 
     return prediction_dates, prediction_list 
 
